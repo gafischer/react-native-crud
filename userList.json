@@ -1,0 +1,14 @@
+[
+	{
+		"id": 1,
+		"name": "Gabriel Schroeder",
+		"email": "gabriel.schroder@labsoft.com.br",
+		"avatarUrl": "https://github.com/gafischer.png"
+	},
+	{
+		"id": 2,
+		"name": "Vinicius Rodel",
+		"email": "vinicius.rodel@labsoft.com.br",
+		"avatarUrl": "https://cdn.pixabay.com/photo/2016/09/01/08/24/smiley-1635449_960_720.png"
+	}
+]
