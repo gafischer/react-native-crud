@@ -1,7 +1,86 @@
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
+
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 
 import { Container } from "./styles";
 
-export function New()  {
-	return <Container />;
+interface IFormProps {
+	name: string;
+	email: string;
+	github: string;
+}
+
+export function New() {
+	const {
+		control,
+		handleSubmit,
+		formState: { errors }
+	} = useForm<IFormProps>();
+
+	const onSubmit = (data: IFormProps) => {
+		console.log(data);
+	};
+
+	return (
+		<Container>
+			<Controller
+				control={control}
+				name="name"
+				rules={{
+					required: "Informe o nome",
+					minLength: {
+						value: 5,
+						message: "Mínimo 5 caracteres"
+					}
+				}}
+				render={({ field: { onChange, value } }) => (
+					<Input
+						placeholder="Nome"
+						icon="person-outline"
+						onChangeText={onChange}
+						value={value}
+						errorMessage={errors.name?.message}
+					/>
+				)}
+			/>
+
+			<Controller
+				control={control}
+				name="email"
+				rules={{
+					required: "Informe o e-mail",
+					pattern: {
+						value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
+						message: "E-mail inválido"
+					}
+				}}
+				render={({ field: { onChange, value } }) => (
+					<Input
+						placeholder="E-mail"
+						icon="mail-outline"
+						onChangeText={onChange}
+						value={value}
+						errorMessage={errors.email?.message}
+					/>
+				)}
+			/>
+
+			<Controller
+				control={control}
+				name="github"
+				render={({ field: { onChange, value } }) => (
+					<Input
+						placeholder="Github"
+						icon="logo-github"
+						onChangeText={onChange}
+						value={value}
+					/>
+				)}
+			/>
+
+			<Button title="Inserir" onPress={handleSubmit(onSubmit)} />
+		</Container>
+	);
 }

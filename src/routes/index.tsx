@@ -1,12 +1,15 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 import { StackRoutes } from "./stack.routes";
+import { useTheme } from "../context/ThemeContext";
 
 export function Routes() {
+	const { theme } = useTheme();
 	return (
-		<NavigationContainer>
+		<>
+			<StatusBar style={theme.dark ? "light" : "dark"} translucent />
 			<StackRoutes />
-		</NavigationContainer>
+		</>
 	);
 }

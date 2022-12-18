@@ -1,20 +1,25 @@
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons";
 
-import users from "../../../userList.json";
+import { useTheme } from "../../context/ThemeContext";
+import config from "../../../config.json";
 
 import IconButton from "../../components/IconButton";
-import { UserItem } from "../../components/UserItem";
+import { UserList } from "../../components/UserList";
 
 import { Container } from "./style";
 import { Alert } from "react-native";
 
-export function Details(){
+export function Details() {
 	const navigation = useNavigation();
+	const { theme } = useTheme();
 
-	const	handleNewUser = () => {
+	const handleNewUser = () => {
 		navigation.navigate("new");
+	};
+
+	const handleSettins = () => {
+		navigation.navigate("settings");
 	};
 
 	const handleEditUser = (id: number) => {
@@ -22,7 +27,9 @@ export function Details(){
 	};
 
 	const handleDeleteUser = (id: number) => {
-		Alert.alert("Excluir Usuário", `Tem certeza que deseja excluir o usuário ${id}?`,
+		Alert.alert(
+			"Excluir Usuário",
+			`Tem certeza que deseja excluir o usuário ${id}?`,
 			[
 				{
 					text: "Sim",
@@ -30,8 +37,9 @@ export function Details(){
 				},
 				{
 					text: "Não"
-				},
-			] );
+				}
+			]
+		);
 	};
 
 	useEffect(() => {
@@ -41,17 +49,28 @@ export function Details(){
 					icon={{
 						name: "add",
 						size: 32,
-						color: "#FFF"
+						color: theme.colors.text
 					}}
-					onPress={handleNewUser} />
+					onPress={handleNewUser}
+				/>
+			),
+			headerLeft: () => (
+				<IconButton
+					icon={{
+						name: "settings",
+						size: 28,
+						color: theme.colors.text
+					}}
+					onPress={handleSettins}
+				/>
 			)
 		});
-	}, [navigation]);
+	}, [theme]);
 
 	return (
 		<Container>
-			<UserItem
-				users={users}
+			<UserList
+				users={config.users}
 				onEdit={handleEditUser}
 				onDelete={handleDeleteUser}
 			/>
