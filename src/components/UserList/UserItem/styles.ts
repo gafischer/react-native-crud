@@ -22,7 +22,7 @@ export const Action = styled.View`
 export const UserAvatar = styled.Image`
 	width: 40px;
 	height: 40px;
-	border-radius: 30px;
+	border-radius: 20px;
 `;
 
 export const UserName = styled.Text`

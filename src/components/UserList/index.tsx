@@ -3,7 +3,7 @@ import { FlatList, ListRenderItemInfo } from "react-native";
 
 import { UserItem } from "./UserItem";
 
-import { Container } from "./styles";
+import { Container, ListContainer } from "./styles";
 
 export interface IUserProps {
 	id: number;
@@ -24,13 +24,15 @@ export function UserList({ users, onEdit, onDelete }: IUserListProps) {
 	);
 
 	return (
-		<Container>
-			<FlatList
-				scrollEnabled={false}
-				keyExtractor={(user) => user.email}
-				data={users}
-				renderItem={renderItem}
-			/>
+		<Container horizontal={true}>
+			<ListContainer>
+				<FlatList
+					scrollEnabled={false}
+					keyExtractor={(user) => user.email}
+					data={users}
+					renderItem={renderItem}
+				/>
+			</ListContainer>
 		</Container>
 	);
 }
