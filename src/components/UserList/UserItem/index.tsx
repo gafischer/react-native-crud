@@ -23,17 +23,19 @@ interface IUserItemProps {
 export function UserItem({ user, onDelete, onEdit }: IUserItemProps) {
 	const theme = useTheme();
 
-	const getGithubProfileImage = (username?: string) => {
-		if (!username) {
-			return "https://www.account.p3heavenlybeauty.com/images/noProfilePlaceholder.png";
+	const getGithubProfileImage = (name: string, github?: string) => {
+		if (!github) {
+			return `https://avatars.dicebear.com/api/identicon/${name}.png`;
 		}
 
-		return `https://github.com/${username}.png`;
+		return `https://github.com/${github}.png`;
 	};
 
 	return (
 		<Container>
-			<UserAvatar source={{ uri: getGithubProfileImage(user.github) }} />
+			<UserAvatar
+				source={{ uri: getGithubProfileImage(user.name, user.github) }}
+			/>
 			<Content>
 				<UserName>{user.name}</UserName>
 				<UserEmail>{user.email}</UserEmail>
