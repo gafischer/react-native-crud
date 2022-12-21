@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { Alert } from "react-native";
 import { useForm, Controller } from "react-hook-form";
+
+import { User } from "../../database/model/User";
+import { addUser } from "../../database/helpers";
 
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
@@ -16,11 +20,26 @@ export function New() {
 	const {
 		control,
 		handleSubmit,
+		reset,
 		formState: { errors }
 	} = useForm<IFormProps>();
 
-	const onSubmit = (data: IFormProps) => {
-		console.log(data);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const onSubmit = async (data: IFormProps) => {
+		try {
+			setIsLoading(true);
+
+			await addUser(data as User);
+
+			reset();
+
+			Alert.alert("Sucesso", "Criação realizada com sucesso!");
+		} catch (error) {
+			Alert.alert("Erro", `Não foi possível criar o usuário. ${error}`);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -80,7 +99,11 @@ export function New() {
 				)}
 			/>
 
-			<Button title="Inserir" onPress={handleSubmit(onSubmit)} />
+			<Button
+				title="Inserir"
+				onPress={handleSubmit(onSubmit)}
+				isLoading={isLoading}
+			/>
 		</Container>
 	);
 }

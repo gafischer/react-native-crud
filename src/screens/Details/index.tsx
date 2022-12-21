@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
+import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { User } from "../../database/model/User";
 import { useTheme } from "../../context/ThemeContext";
-import config from "../../../config.json";
 
 import IconButton from "../../components/IconButton";
-import { UserList } from "../../components/UserList";
+import UserList from "../../components/UserList";
 
 import { Container } from "./style";
-import { Alert } from "react-native";
+import { deleteUser } from "../../database/helpers";
 
 export function Details() {
 	const navigation = useNavigation();
@@ -22,18 +23,29 @@ export function Details() {
 		navigation.navigate("settings");
 	};
 
-	const handleEditUser = (id: number) => {
-		navigation.navigate("edit", { id });
+	const handleEditUser = (userId: string) => {
+		navigation.navigate("edit", { userId });
 	};
 
-	const handleDeleteUser = (id: number) => {
+	const handleDeleteUser = (user: User) => {
 		Alert.alert(
 			"Excluir Usuário",
-			`Tem certeza que deseja excluir o usuário ${id}?`,
+			`Tem certeza que deseja excluir permanentemente o usuário ${user.name}?`,
 			[
 				{
 					text: "Sim",
-					onPress: () => Alert.alert("Usuário Excluído")
+					onPress: async () => {
+						try {
+							await deleteUser(user);
+
+							Alert.alert("Sucesso", "Usuário excluído com sucesso!");
+						} catch (error) {
+							Alert.alert(
+								"Erro",
+								`Não foi possível excluir o usuário. ${error}`
+							);
+						}
+					}
 				},
 				{
 					text: "Não"
@@ -69,11 +81,7 @@ export function Details() {
 
 	return (
 		<Container>
-			<UserList
-				users={config.users}
-				onEdit={handleEditUser}
-				onDelete={handleDeleteUser}
-			/>
+			<UserList onEdit={handleEditUser} onDelete={handleDeleteUser} />
 		</Container>
 	);
 }

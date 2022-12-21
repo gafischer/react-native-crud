@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextInputProps } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -30,6 +30,10 @@ export function Input({ icon, errorMessage, value, ...props }: IInputProps) {
 		setIsFocused(false);
 		setIsFilled(!!value);
 	};
+
+	useEffect(() => {
+		setIsFilled(!!value);
+	}, [value]);
 
 	return (
 		<>

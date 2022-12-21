@@ -1,5 +1,4 @@
 import React, {
-	useCallback,
 	useContext,
 	useMemo,
 	useState,
@@ -10,7 +9,7 @@ import { useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "styled-components/native";
 import themes from "../theme";
-import { getData, storeData } from "../utl/asyncStorage";
+import { getData, storeData } from "../database/helpers";
 
 export type Theme = typeof themes["light"];
 

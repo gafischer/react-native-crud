@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useForm, Controller } from "react-hook-form";
 
+import { User } from "../../database/model/User";
+import { getUserById, updateUser } from "../../database/helpers";
+
 import { Input } from "../../components/Input";
+import { Button } from "../../components/Button";
 
 import { Container } from "./styles";
 
-import config from "../../../config.json";
-import { Button } from "../../components/Button";
-
 interface IEditProps {
-	id: number;
+	userId: string;
 }
 
 interface IFormProps {
@@ -21,25 +23,55 @@ interface IFormProps {
 
 export function Edit() {
 	const route = useRoute();
-
-	const { id } = route.params as IEditProps;
-
-	const user = config.users.find((user) => user.id === id);
+	const { userId } = route.params as IEditProps;
+	const [isLoading, setIsLoading] = useState(false);
+	const [user, setUser] = useState<User>({} as User);
 
 	const {
 		control,
 		handleSubmit,
+		reset,
 		formState: { errors }
 	} = useForm<IFormProps>({
 		defaultValues: {
-			name: user.name,
-			email: user.email,
-			github: user.github
+			name: "",
+			email: "",
+			github: ""
 		}
 	});
 
-	const handleEdit = (data) => {
-		console.log(data);
+	useEffect(() => {
+		const fetchUser = async () => {
+			const findUser = await getUserById(userId);
+
+			setUser(findUser);
+		};
+
+		fetchUser();
+	}, []);
+
+	useEffect(() => {
+		const { name, email, github } = user;
+
+		reset({
+			name,
+			email,
+			github
+		});
+	}, [user]);
+
+	const handleSave = async (data: IFormProps) => {
+		try {
+			setIsLoading(true);
+
+			await updateUser(userId, data as User);
+
+			Alert.alert("Sucesso", "Usuário alterado com sucesso!");
+		} catch (error) {
+			Alert.alert("Erro", `Não foi possível salvar as alterações. ${error}`);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -100,7 +132,11 @@ export function Edit() {
 				)}
 			/>
 
-			<Button title="Salvar" onPress={handleSubmit(handleEdit)} />
+			<Button
+				title="Salvar"
+				onPress={handleSubmit(handleSave)}
+				isLoading={isLoading}
+			/>
 		</Container>
 	);
 }

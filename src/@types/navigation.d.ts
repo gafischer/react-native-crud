@@ -4,7 +4,7 @@ export declare global {
 			home: undefined;
 			new: undefined;
 			edit: {
-				id: number;
+				userId: string;
 			};
 			settings: undefined;
 		}

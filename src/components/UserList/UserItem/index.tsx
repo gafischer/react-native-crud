@@ -1,9 +1,10 @@
 import React from "react";
-import IconButton from "../../IconButton";
-import { useTheme } from "styled-components/native";
 
-import getGithubProfileImage from "../../../utl/githubProfileImage";
-import { IUserProps } from "../../UserList";
+import { useTheme } from "styled-components/native";
+import { User } from "../../../database/model/User";
+
+import IconButton from "../../IconButton";
+
 import {
 	Container,
 	Content,
@@ -14,13 +15,21 @@ import {
 } from "./styles";
 
 interface IUserItemProps {
-	user: IUserProps;
-	onEdit: (id: number) => void;
-	onDelete: (id: number) => void;
+	user: User;
+	onEdit: (userId: string) => void;
+	onDelete: (user: User) => void;
 }
 
 export function UserItem({ user, onDelete, onEdit }: IUserItemProps) {
 	const theme = useTheme();
+
+	const getGithubProfileImage = (username?: string) => {
+		if (!username) {
+			return "https://www.account.p3heavenlybeauty.com/images/noProfilePlaceholder.png";
+		}
+
+		return `https://github.com/${username}.png`;
+	};
 
 	return (
 		<Container>
@@ -41,7 +50,7 @@ export function UserItem({ user, onDelete, onEdit }: IUserItemProps) {
 			</Action>
 			<Action>
 				<IconButton
-					onPress={() => onDelete(user.id)}
+					onPress={() => onDelete(user)}
 					icon={{
 						name: "delete",
 						size: 24,
